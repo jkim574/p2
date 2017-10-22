@@ -243,13 +243,13 @@ public class TrainHub {
         //    and a reference to the last node with matching cargo.
 	curr = srcHeader.getNext();
 	prev = srcHeader;
-	while (!curr.getData().getName().equals(cargoName)) {
+	while (!curr.getData().getName().toLowerCase().equals(cargoName.toLowerCase())) {
 	    prev = curr;
 	    curr = curr.getNext();
 	}
 	first_prev = prev;
 	first = curr;
-	while (curr != null && curr.getData().getName().equals(cargoName)) {
+	while (curr != null && curr.getData().getName().toLowerCase().equals(cargoName.toLowerCase())) {
 	    prev = curr;
 	    curr = curr.getNext();
 	}
@@ -268,7 +268,7 @@ public class TrainHub {
 	if (first_prev.getData() != null) {
 	    first_prev.setNext(last.getNext());
 	} else {
-	    System.out.println("Src Train's New Header: " + last.getNext().getData().getName() + ", " + last.getNext().getData().getWeight());
+	    //System.out.println("Src Train's New Header: " + last.getNext().getData().getName() + ", " + last.getNext().getData().getWeight());
 	    srcHeader.setNext(last.getNext());
 	    System.out.println("Src Train: " + srcTrain);
 	}
@@ -277,7 +277,7 @@ public class TrainHub {
 	curr = dstHeader.getNext();
 	prev = dstHeader;
 	while (curr != null) {
-	    if (curr.getData().getName().equals(cargoName)) {
+	    if (curr.getData().getName().toLowerCase().equals(cargoName.toLowerCase())) {
 		break;
 	    }
 	    prev = curr;
@@ -292,21 +292,22 @@ public class TrainHub {
 	    prev = dstHeader;
 
 	    while (curr != null) {
-		if (cargoName.compareTo(curr.getData().getName()) > 0) {
+		if (cargoName.toLowerCase().compareTo(curr.getData().getName().toLowerCase()) > 0) {
 		    prev = curr;
 		    curr = curr.getNext();
 		    continue;
-		} else if (cargoName.compareTo(curr.getData().getName()) < 0) {
+		} else if (cargoName.toLowerCase().compareTo(curr.getData().getName().toLowerCase()) < 0) {
 		    prev.setNext(first);
 		    last.setNext(curr);
-		    break;
+		    return;
 		}
-		prev = curr;
-		curr = curr.getNext();
-
+		// prev = curr;
+		// curr = curr.getNext();
 	    }
-	    // prev.setNext(first);
-	    // last.setNext(curr);
+	    if (curr == null) {
+		prev.setNext(first);
+		last.setNext(curr);
+	    }
 
 	}
 
