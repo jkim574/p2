@@ -77,7 +77,7 @@ public class TrainHub {
     public Train findTrain(String dest){
         //TODO: implement this method
 	for (Train train : trains) {
-	    if (train.getDestination().equals(dest)) {
+	    if (train.getDestination().toLowerCase().equals(dest.toLowerCase())) {
 		return train;
 	    }
 	}
@@ -133,8 +133,15 @@ public class TrainHub {
      */
     public boolean departTrain(String dest){
         //TODO: implement this method
-
-	return true;
+	int count = 0;
+        for (Train train : trains) {
+	    if (train.getDestination().toLowerCase().equals(dest.toLowerCase())) {
+		trains.remove(count);
+		return true;
+     	    }
+	    count++;
+	}
+	return false;
     }
     /**
      * This method deletes all the trains.
@@ -143,7 +150,12 @@ public class TrainHub {
      */
     public boolean departAllTrains(){
         //TODO: implement this method
-
+	if (trains.size() == 0) {
+	    return false;
+	}
+	for (Train train : trains) {
+	    trains.remove(0);
+	}
 	return true;
     }
 
@@ -155,7 +167,15 @@ public class TrainHub {
      */
     public boolean displayTrain(String dest){
         //TODO: implement this method
-	return true;
+	for (Train train : trains) {
+	    if (train.getDestination().toLowerCase().equals(dest.toLowerCase())) {
+		System.out.println(train);
+		return true;
+	    }
+
+	}
+
+	return false;
 
     }
 
@@ -221,24 +241,73 @@ public class TrainHub {
 
         // 1. Find references to the node BEFORE the first matching cargo node
         //    and a reference to the last node with matching cargo.
+	curr = srcHeader;
+	prev = null;
+	while (!curr.getData().getName().equals(cargoName)) {
+	    prev = curr;
+	    curr = curr.getNext();
+	}
+	first_prev = prev;
+	first = curr;
+	while (curr != null && curr.getData().getName().equals(cargoName)) {
+	    prev = curr;
+	    curr = curr.getNext();
+	}
+	last = prev;
 
-
-
-
+	// if (first_prev != null && first != null && last != null) {
+	//     System.out.println("fist_prev: " + first_prev.getData().getName() + ", " + first_prev.getData().getWeight());
+	//     System.out.println("first: " + first.getData().getName() + ", " + first.getData().getWeight());
+	//     System.out.println("last: " + last.getData().getName() + ", " + last.getData().getWeight());
+	// }
             // NOTE : We know we can find this cargo,
             //        so we are not going to deal with other exceptions here.
 
-
-
-
-
         // 2. Remove from matching chain of nodes from src Train
         //    by linking node before match to node after matching chain
-
-
-
+	if (first_prev != null) {
+	    first_prev.setNext(last.getNext());
+	} else {
+	    // System.out.println("Src Train's New Header: " + last.getNext().getData().getName() + ", " + last.getNext().getData().getWeight());
+	    srcHeader.setNext(last.getNext());
+	}
 
         // 3-1. Find reference to first matching cargo in dst Train
+	curr = dstHeader;
+	prev = null;
+	while (curr != null) {
+	    if (curr.getData().getName().equals(cargoName)) {
+		break;
+	    }
+	    prev = curr;
+	    curr = curr.getNext();
+
+	}
+	if (curr != null) {
+	    prev.setNext(first);
+	    last.setNext(curr);
+	} else {
+	    curr = dstHeader;
+	    prev = curr;
+
+	    while (curr != null) {
+		if (cargoName.compareTo(curr.getData().getName()) > 0) {
+		    prev = curr;
+		    curr = curr.getNext();
+		    continue;
+		} else if (cargoName.compareTo(curr.getData().getName()) < 0) {
+		    prev.setNext(first);
+		    last.setNext(curr);
+		    break;
+		}
+		prev = curr;
+		curr = curr.getNext();
+
+	    }
+	    prev.setNext(first);
+	    last.setNext(curr);
+
+	}
 
 
                 // 3-2. If found, insert them before cargo found in dst

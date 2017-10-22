@@ -99,7 +99,7 @@ public class Train implements Iterable<CargoCar> {
 	    LinkedListIterator<CargoCar> itr = train.iterator();
 	    while (itr.hasNext()) {
 		CargoCar cc = itr.next();
-		if (cc.getName().equals(cargoName)) {
+		if (cc.getName().toLowerCase().equals(cargoName.toLowerCase())) {
 		    train.remove(count);
 		    return cc;
 		}
