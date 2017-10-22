@@ -64,11 +64,7 @@ public class TrainHub {
      */
     public CargoCar removeCargo(String dest, String name){
         //TODO: implement this method
-	if (dest == name) {
-	    return name;
-	} else {
-	    return null;
-	}
+
 
     }
 
@@ -81,6 +77,11 @@ public class TrainHub {
      */
     public int getWeight(String name){
         //TODO: implement this method
+	LinkedListIterator<Train> itr = trains.iterator();
+	while (itr.hasNext()) {
+	    Train tr = itr.next();
+	}
+
 	return weight;
     }
 
@@ -93,11 +94,6 @@ public class TrainHub {
      */
     public boolean departTrain(String dest){
         //TODO: implement this method
-	if (dest == null || dest.isEmpty()) {
-	    return false;
-	} else {
-	    return true;
-	}
 
     }
     /**
@@ -108,9 +104,9 @@ public class TrainHub {
     public boolean departAllTrains(){
         //TODO: implement this method
 	if (trains.isEmpty()) {
-	    return true;
-	} else {
 	    return false;
+	} else {
+	    return true;
 	}
 
     }

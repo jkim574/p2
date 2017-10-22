@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Random;
 import java.util.Scanner;
+import java.io.*;
 
 /**
  * This class provide methods for generating a Train.
@@ -77,6 +78,25 @@ public class TrainGenerator {
 	public static Train getIncomingTrainFromFile(String filename){
 		//TODO: implement this method
 
+	    Train train = new Train("TrainHub");
+	    String line = null;
+
+	    try {
+		FileReader filereader = new FileReader(filename);
+
+		BufferedReader bf = new BufferedReader(filereader);
+
+		while  ((line = bf.readLine()) != null) {
+		    String[] words = line.split(",");
+		    CargoCar cc = new CargoCar(words[1], Integer.parseInt(words[2]), words[0]);
+		    train.add(cc);
+		}
+
+		bf.close();
+	    } catch (IOException e) {
+
+	    }
+	    return train;
 
 	}
 }
