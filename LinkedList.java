@@ -28,24 +28,24 @@
  */
 public class LinkedList<E> implements ListADT<E> {
 
-	//   TODO: YOU MUST IMPLEMENT THE LINKED LIST CLASS AS FOLLOWS:
-	//
-	//   It must be a SINGLY-LINKED chain of ListNode<E> nodes
-	//   It must have a "header node" ("dummy node" without data)
-	//   It must NOT have a tail reference
-	//   It must NOT keep a number of data items
-	//   NOTE: in this program, the chains of nodes in this program may be
-	//   changed outside of the LinkedList class, so the actual data count
-	//   must be determined each time size is called.
-	//
-	//   It must return a LinkedListIterator<E> as its iterator.
-	//
-	//   Note: The "header node"'s data reference is always null and
-	//   its next references the node with the first data of the list.
-	//
-	//   Be sure to implement this LinkedList<E> using Listnode
-	//   you must use LinkedListIterator<E> instead of Iterator<E>
-	//
+    //   TODO: YOU MUST IMPLEMENT THE LINKED LIST CLASS AS FOLLOWS:
+    //
+    //   It must be a SINGLY-LINKED chain of ListNode<E> nodes
+    //   It must have a "header node" ("dummy node" without data)
+    //   It must NOT have a tail reference
+    //   It must NOT keep a number of data items
+    //   NOTE: in this program, the chains of nodes in this program may be
+    //   changed outside of the LinkedList class, so the actual data count
+    //   must be determined each time size is called.
+    //
+    //   It must return a LinkedListIterator<E> as its iterator.
+    //
+    //   Note: The "header node"'s data reference is always null and
+    //   its next references the node with the first data of the list.
+    //
+    //   Be sure to implement this LinkedList<E> using Listnode
+    //   you must use LinkedListIterator<E> instead of Iterator<E>
+    //
 
     private Listnode<E> headNode; // loop's header node
 
@@ -56,20 +56,20 @@ public class LinkedList<E> implements ListADT<E> {
 	headNode = null;
     }
 
-	/**
-	 * Returns a reference to the header node for this linked list.
-	 * The header node is the first node in the chain and it does not
-	 * contain a data reference.  It does contain a reference to the
-	 * first node with data (next node in the chain). That node will exist
-	 * and contain a data reference if any data has been added to the list.
-	 *
-	 * NOTE: Typically, a LinkedList would not provide direct access
-	 * to the headerNode in this way to classes that use the linked list.
-	 * We are providing direct access to support testing and to
-	 * allow multiple nodes to be moved as a chain.
-	 *
-	 * @return a reference to the header node of this list. 0
-	 */
+    /**
+     * Returns a reference to the header node for this linked list.
+     * The header node is the first node in the chain and it does not
+     * contain a data reference.  It does contain a reference to the
+     * first node with data (next node in the chain). That node will exist
+     * and contain a data reference if any data has been added to the list.
+     *
+     * NOTE: Typically, a LinkedList would not provide direct access
+     * to the headerNode in this way to classes that use the linked list.
+     * We are providing direct access to support testing and to
+     * allow multiple nodes to be moved as a chain.
+     *
+     * @return a reference to the header node of this list. 0
+     */
     public Listnode<E> getHeaderNode() {
 	//TODO implement this method
 	return headNode;
@@ -84,9 +84,11 @@ public class LinkedList<E> implements ListADT<E> {
     public int size() {
 	Listnode<E> curr = headNode;
 	int length = 0;
-	while (curr != null) {
-	    curr = curr.getNext();
-	    length++;
+	if (curr != null) {
+	    while (curr.getNext() != null) {
+		curr = curr.getNext();
+		length++;
+	    }
 	}
 	return length;
     }
@@ -109,6 +111,7 @@ public class LinkedList<E> implements ListADT<E> {
 	Listnode<E> curr = headNode;
 	Listnode<E> prev = null;
 	if (curr != null) {
+	    curr = headNode.getNext();
 	    while (pos > 0) {
 		prev = curr;
 		curr = curr.getNext();
@@ -120,7 +123,7 @@ public class LinkedList<E> implements ListADT<E> {
 		return e;
 	    } else {
 	        E e = curr.getData();
-		headNode = curr.getNext();
+		headNode.setNext(curr.getNext());
 		return e;
 	    }
 	} else {
@@ -157,15 +160,15 @@ public class LinkedList<E> implements ListADT<E> {
 	}
 	Listnode<E> curr = headNode;
 	if (curr != null) {
+	    curr = headNode.getNext();
 	    while (pos > 0) {
 		curr = curr.getNext();
 		pos--;
 	    }
 	    E e = curr.getData();
 	    return e;
-	} else {
-	    return null;
 	}
+	return null;
     }
 
     /**
@@ -177,10 +180,13 @@ public class LinkedList<E> implements ListADT<E> {
      */
     public boolean contains(E item) {
 	Listnode<E> curr = headNode;
-	while (curr != null) {
-	    if (curr.getData().equals(item))
-		return true;
-	    curr = curr.getNext();
+	if (curr != null) {
+	    curr = headNode.getNext();
+	    while (curr != null) {
+		if (curr.getData().equals(item))
+		    return true;
+		curr = curr.getNext();
+	    }
 	}
 	return false;
     }
@@ -208,6 +214,7 @@ public class LinkedList<E> implements ListADT<E> {
 	Listnode<E> prev = null;
 	Listnode<E> node = new Listnode<E>(item);
 	if (curr != null) {
+	    curr = headNode.getNext();
 	    while (pos > 0) {
 		prev = curr;
 		curr = curr.getNext();
@@ -217,11 +224,13 @@ public class LinkedList<E> implements ListADT<E> {
 		prev.setNext(node);
 		node.setNext(curr);
 	    } else {
-		node.setNext(headNode);
-		headNode = node;
+		node.setNext(headNode.getNext());
+		headNode.setNext(node);
+
 	    }
 	} else {
-	    headNode = node;
+	    headNode.setNext(node);
+
 	}
     }
 
@@ -243,7 +252,8 @@ public class LinkedList<E> implements ListADT<E> {
 	    }
 	    curr.setNext(node);
 	} else {
-	    headNode = node;
+	    headNode = new Listnode<E>(null, node);
+	    //headNode = node;
 	}
     }
 

@@ -241,8 +241,8 @@ public class TrainHub {
 
         // 1. Find references to the node BEFORE the first matching cargo node
         //    and a reference to the last node with matching cargo.
-	curr = srcHeader;
-	prev = null;
+	curr = srcHeader.getNext();
+	prev = srcHeader;
 	while (!curr.getData().getName().equals(cargoName)) {
 	    prev = curr;
 	    curr = curr.getNext();
@@ -255,26 +255,27 @@ public class TrainHub {
 	}
 	last = prev;
 
-	// if (first_prev != null && first != null && last != null) {
-	//     System.out.println("fist_prev: " + first_prev.getData().getName() + ", " + first_prev.getData().getWeight());
-	//     System.out.println("first: " + first.getData().getName() + ", " + first.getData().getWeight());
-	//     System.out.println("last: " + last.getData().getName() + ", " + last.getData().getWeight());
-	// }
+	if (first_prev.getData() != null)
+	    System.out.println("fist_prev: " + first_prev.getData().getName() + ", " + first_prev.getData().getWeight());
+	System.out.println("first: " + first.getData().getName() + ", " + first.getData().getWeight());
+	System.out.println("last: " + last.getData().getName() + ", " + last.getData().getWeight());
+
             // NOTE : We know we can find this cargo,
             //        so we are not going to deal with other exceptions here.
 
         // 2. Remove from matching chain of nodes from src Train
         //    by linking node before match to node after matching chain
-	if (first_prev != null) {
+	if (first_prev.getData() != null) {
 	    first_prev.setNext(last.getNext());
 	} else {
-	    // System.out.println("Src Train's New Header: " + last.getNext().getData().getName() + ", " + last.getNext().getData().getWeight());
+	    System.out.println("Src Train's New Header: " + last.getNext().getData().getName() + ", " + last.getNext().getData().getWeight());
 	    srcHeader.setNext(last.getNext());
+	    System.out.println("Src Train: " + srcTrain);
 	}
 
         // 3-1. Find reference to first matching cargo in dst Train
-	curr = dstHeader;
-	prev = null;
+	curr = dstHeader.getNext();
+	prev = dstHeader;
 	while (curr != null) {
 	    if (curr.getData().getName().equals(cargoName)) {
 		break;
@@ -287,8 +288,8 @@ public class TrainHub {
 	    prev.setNext(first);
 	    last.setNext(curr);
 	} else {
-	    curr = dstHeader;
-	    prev = curr;
+	    curr = dstHeader.getNext();
+	    prev = dstHeader;
 
 	    while (curr != null) {
 		if (cargoName.compareTo(curr.getData().getName()) > 0) {
@@ -304,8 +305,8 @@ public class TrainHub {
 		curr = curr.getNext();
 
 	    }
-	    prev.setNext(first);
-	    last.setNext(curr);
+	    // prev.setNext(first);
+	    // last.setNext(curr);
 
 	}
 

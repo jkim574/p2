@@ -56,9 +56,9 @@ public class LinkedListIterator<T> implements Iterator<T> {
 	    if (!hasNext()) {
 		throw new NoSuchElementException();
 	    }
-	    T data = curr.getData();
-	    curr = curr.getNext();
 
+	    curr = curr.getNext();
+	    T data = curr.getData();
 	    return data;
 	}
 
@@ -71,12 +71,12 @@ public class LinkedListIterator<T> implements Iterator<T> {
 	@Override
 	public boolean hasNext() {
 		// TODO implement this method
-	    if (curr == null) {
-		return false;
+	    if (curr != null) {
+		if (curr.getNext() != null) {
+		    return true;
+		}
 	    }
-	    else {
-		return true;
-	    }
+	    return false;
 	}
 
     /**
