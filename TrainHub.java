@@ -39,7 +39,33 @@ public class TrainHub {
      */
     public void processIncomingTrain(Train train){
         //TODO: implement this method
-
+	LinkedListIterator<CargoCar> list = train.iterator();
+	while (list.hasNext()) {
+	    CargoCar cc = list.next();
+	    Train outGoingTrain = findTrain(cc.getDestination());
+	    if (outGoingTrain == null) {
+		outGoingTrain = new Train(cc.getDestination());
+		outGoingTrain.add(cc);
+		trains.add(outGoingTrain);
+	    } else {
+		String car = cc.getName();
+		CargoCar cargocar = train.removeCargo(car);
+		LinkedListIterator<CargoCar> itr = outGoingTrain.iterator();
+		int count = 0;
+		while (itr.hasNext()) {
+		    CargoCar cargo = itr.next();
+		    if (car.compareTo(cargo.getName()) > 0) {
+			count++;
+			continue;
+		    } else if (car.compareTo(cargo.getName()) == 0) {
+			outGoingTrain.add(count, cargocar);
+		    } else {
+		        outGoingTrain.add(count, cargocar);
+		    }
+		    count++;
+		}
+	    }
+	}
     }
 
     /**
@@ -50,7 +76,12 @@ public class TrainHub {
      */
     public Train findTrain(String dest){
         //TODO: implement this method
-
+	for (Train train : trains) {
+	    if (train.getDestination().equals(dest)) {
+		return train;
+	    }
+	}
+	return null;
     }
 
     /**
@@ -64,8 +95,13 @@ public class TrainHub {
      */
     public CargoCar removeCargo(String dest, String name){
         //TODO: implement this method
+        Train t = findTrain(dest);
+	if (t != null) {
+	    CargoCar cc = t.removeCargo(name);
+	    return cc;
+	}
 
-
+	return null;
     }
 
     /**
@@ -77,9 +113,12 @@ public class TrainHub {
      */
     public int getWeight(String name){
         //TODO: implement this method
+	int weight = 0;
 	LinkedListIterator<Train> itr = trains.iterator();
 	while (itr.hasNext()) {
 	    Train tr = itr.next();
+	    weight += tr.getWeight(name);
+
 	}
 
 	return weight;
@@ -95,6 +134,7 @@ public class TrainHub {
     public boolean departTrain(String dest){
         //TODO: implement this method
 
+	return true;
     }
     /**
      * This method deletes all the trains.
@@ -103,12 +143,8 @@ public class TrainHub {
      */
     public boolean departAllTrains(){
         //TODO: implement this method
-	if (trains.isEmpty()) {
-	    return false;
-	} else {
-	    return true;
-	}
 
+	return true;
     }
 
     /**
@@ -119,6 +155,8 @@ public class TrainHub {
      */
     public boolean displayTrain(String dest){
         //TODO: implement this method
+	return true;
+
     }
 
     /**
@@ -129,7 +167,15 @@ public class TrainHub {
      */
     public boolean displayAllTrains(){
         //TODO: implement this method
+	if (trains.size() == 0) {
+	    System.out.println("size is 0");
+	    return false;
+	}
 
+	for (Train train : trains) {
+	    System.out.println(train);
+	}
+	return true;
     }
 
     /**

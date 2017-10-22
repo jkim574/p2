@@ -64,7 +64,8 @@ public class Train implements Iterable<CargoCar> {
 		//TODO: implement this method
 	    int weight = 0;
 	    for (CargoCar cc : train) {
-		weight =+ cc.getWeight();
+		if (cc.getName().equals(cargoName))
+		    weight =+ cc.getWeight();
 	    }
 	    return weight;
 	}
